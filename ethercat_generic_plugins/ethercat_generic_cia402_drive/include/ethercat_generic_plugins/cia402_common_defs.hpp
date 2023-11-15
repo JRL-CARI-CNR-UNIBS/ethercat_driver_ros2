@@ -22,6 +22,7 @@
 #define CiA402D_RPDO_MODE_OF_OPERATION  ((uint16_t) 0x6060)
 
 #define CiA402D_TPDO_POSITION ((uint16_t) 0x6064)
+#define CiA402D_TPDO_VELOCITY ((uint16_t) 0x606c)
 #define CiA402D_TPDO_STATUSWORD  ((uint16_t) 0x6041)
 #define CiA402D_TPDO_MODE_OF_OPERATION_DISPLAY  ((uint16_t) 0x6061)
 
@@ -51,8 +52,16 @@ enum ModeOfOperation
   MODE_HOMING                 = 6,
   MODE_INTERPOLATED_POSITION  = 7,
   MODE_CYCLIC_SYNC_POSITION   = 8,
-  MODE_CYCLIC_SYNC_VELOCITY  = 9,
+  MODE_CYCLIC_SYNC_VELOCITY   = 9,
   MODE_CYCLIC_SYNC_TORQUE     = 10
+};
+
+enum HomingSequence
+{
+  HOMING_NO_MODE                = 0,
+  HOMING_SELECTED               = 1,
+  HOMING_IMPULSE                = 2,
+  HOMING_ACTIVE                 = 3
 };
 
 const std::map<DeviceState, std::string> DEVICE_STATE_STR = {

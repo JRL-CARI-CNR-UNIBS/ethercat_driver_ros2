@@ -68,7 +68,7 @@ CallbackReturn EthercatDriver::on_init(
   }
 
   for (uint j = 0; j < info_.joints.size(); j++) {
-    RCLCPP_INFO(rclcpp::get_logger("EthercatDriver"), "joints");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("EthercatDriver"), "joints, name: "<< info_.joints[j].name);
     // check all joints for EC modules and load into ec_modules_
     auto module_params = getEcModuleParam(info_.original_xml, info_.joints[j].name, "joint");
     ec_module_parameters_.insert(
@@ -101,8 +101,9 @@ CallbackReturn EthercatDriver::on_init(
       }
     }
   }
+
   for (uint g = 0; g < info_.gpios.size(); g++) {
-    RCLCPP_INFO(rclcpp::get_logger("EthercatDriver"), "gpios");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("EthercatDriver"), "gpios, name: "<< info_.gpios[g].name);
     // check all gpios for EC modules and load into ec_modules_
     auto module_params = getEcModuleParam(info_.original_xml, info_.gpios[g].name, "gpio");
     ec_module_parameters_.insert(
@@ -116,6 +117,7 @@ CallbackReturn EthercatDriver::on_init(
         module_params[i]["command_interface/" +
           info_.gpios[g].command_interfaces[k].name] = std::to_string(k);
       }
+
       try {
         auto module = ec_loader_.createSharedInstance(module_params[i].at("plugin"));
         if (!module->setupSlave(
@@ -136,7 +138,7 @@ CallbackReturn EthercatDriver::on_init(
     }
   }
   for (uint s = 0; s < info_.sensors.size(); s++) {
-    RCLCPP_INFO(rclcpp::get_logger("EthercatDriver"), "sensors");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("EthercatDriver"), "sensors, name: "<< info_.sensors[s].name);
     // check all sensors for EC modules and load into ec_modules_
     auto module_params = getEcModuleParam(info_.original_xml, info_.sensors[s].name, "sensor");
     ec_module_parameters_.insert(

@@ -239,16 +239,40 @@ bool GenericEcSlave::setup_from_config_file(std::string config_file)
 void GenericEcSlave::setup_interface_mapping()
 {
   for (auto & channel : pdo_channels_info_) {
-    if (channel.pdo_type == ethercat_interface::TPDO) {
-      if (paramters_.find("state_interface/" + channel.interface_name) != paramters_.end()) {
-        channel.interface_index =
-          std::stoi(paramters_["state_interface/" + channel.interface_name]);
+    if (!channel.interface_name.empty())
+    {
+      if (channel.pdo_type == ethercat_interface::TPDO)
+      {
+        if (paramters_.find("state_interface/" + channel.interface_name) != paramters_.end())
+        {
+          channel.interface_index = std::stoi(paramters_["state_interface/" + channel.interface_name]);
+          std::cout << "GenericEcSlave: state_interface/" <<
+                       channel.interface_name <<
+                       " mapped" << std::endl;
+        }
+        else
+        {
+          std::cerr << "GenericEcSlave: state_interface/" <<
+                       channel.interface_name <<
+                       " not found" << std::endl;
+        }
       }
-    }
-    if (channel.pdo_type == ethercat_interface::RPDO) {
-      if (paramters_.find("command_interface/" + channel.interface_name) != paramters_.end()) {
-        channel.interface_index = std::stoi(
-          paramters_["command_interface/" + channel.interface_name]);
+
+      if (channel.pdo_type == ethercat_interface::RPDO)
+      {
+        if (paramters_.find("command_interface/" + channel.interface_name) != paramters_.end())
+        {
+          channel.interface_index = std::stoi(paramters_["command_interface/" + channel.interface_name]);
+          std::cout << "GenericEcSlave: command_interface/" <<
+                       channel.interface_name <<
+                       " mapped" << std::endl;
+        }
+        else
+        {
+          std::cerr << "GenericEcSlave: command_interface/" <<
+                       channel.interface_name <<
+                       " not found" << std::endl;
+        }
       }
     }
 

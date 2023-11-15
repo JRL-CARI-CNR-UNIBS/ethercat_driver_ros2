@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <iostream>
 
 #include "yaml-cpp/yaml.h"
 
@@ -95,8 +96,8 @@ public:
     } else {
       buffer_ = EC_READ_U8(domain_address);
       if (popcount(data_mask) == 1) {
-        buffer_ &= ~(data_mask);
-        if (value) {buffer_ |= data_mask;}
+        buffer_ &= (data_mask - 1);
+        if (value) {buffer_ += data_mask;}
       } else if (data_mask != 0) {
         buffer_ = 0;
         buffer_ |= (static_cast<uint8_t>(value) & data_mask);
@@ -110,11 +111,13 @@ public:
   {
     // update state interface
     if (pdo_type == TPDO) {
+//        std::cout << "TPDO" << std::endl;
       ec_read(domain_address);
       if (interface_index >= 0) {
         state_interface_ptr_->at(interface_index) = last_value;
       }
     } else if (pdo_type == RPDO && allow_ec_write) {
+//        std::cout << "RPDO" << std::endl;
       if (interface_index >= 0 &&
         !std::isnan(command_interface_ptr_->at(interface_index)) &&
         !override_command)
@@ -122,6 +125,7 @@ public:
         ec_write(domain_address, factor * command_interface_ptr_->at(interface_index) + offset);
       } else {
         if (!std::isnan(default_value)) {
+//          std::cout << "command_value: nan" << std::endl;
           ec_write(domain_address, default_value);
         }
       }

@@ -37,6 +37,10 @@ install(TARGETS
   ethercat_sdo_srv_server
   DESTINATION lib/${PROJECT_NAME})
 
+install(
+  DIRECTORY include/
+  DESTINATION include/)
+
   ## EXPORTS
 ament_export_include_directories(
   include
